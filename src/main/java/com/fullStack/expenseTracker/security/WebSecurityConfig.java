@@ -63,12 +63,14 @@ public class WebSecurityConfig {
         // Allow specific origins for security
         configuration.setAllowedOrigins(Arrays.asList(
             "https://expensetracker-fys6.onrender.com",  // Production frontend
-            "http://localhost:3000"                      // Development frontend
+            "http://localhost:3000",                     // Development frontend
+            "http://localhost:3001"                      // Alternative development port
         ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "X-Requested-With", "Accept"));
         configuration.setExposedHeaders(Arrays.asList("Authorization", "Content-Type"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L); // 1 hour cache
         
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
@@ -84,9 +86,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/mywallet/auth/**").permitAll()
                                 .requestMatchers("/mywallet/transactiontype/**").permitAll()
-                                .requestMatchers("/mywallet/category/**").permitAll()
-                                .requestMatchers("/mywallet/transaction/**").permitAll()
-                                .requestMatchers("/mywallet/user/**").permitAll()
+                                .requestMatchers("/mywallet/category/getAll").permitAll()
                                 .anyRequest().authenticated()
                 );
 

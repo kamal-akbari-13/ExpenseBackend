@@ -24,7 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -59,5 +61,24 @@ public class SignInController {
                 .token(jwt)
                 .roles(roles)
                 .build());
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<?> testAuth() {
+        return ResponseEntity.ok(Map.of(
+            "message", "Authentication test endpoint",
+            "timestamp", new Date(),
+            "status", "success"
+        ));
+    }
+
+    @GetMapping("/test-protected")
+    public ResponseEntity<?> testProtectedAuth() {
+        return ResponseEntity.ok(Map.of(
+            "message", "Protected authentication test endpoint",
+            "timestamp", new Date(),
+            "status", "success",
+            "authenticated", true
+        ));
     }
 }
